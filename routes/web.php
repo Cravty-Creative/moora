@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RankingController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
 
@@ -49,11 +51,17 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.laravel-examples.user-profile');
 	})->name('user-profile');
 
-	// Route utk Admin
+	// Route manage data karyawan
 	Route::get('karyawan', [KaryawanController::class, 'index'])->name('karyawan');
 	Route::get('karyawanDT', [KaryawanController::class, 'getList']);
 	Route::get('karyawan/{id}', [KaryawanController::class, 'show']);
 	Route::post('karyawan', [KaryawanController::class, 'create']);
 	Route::post('karyawan/{id}', [KaryawanController::class, 'update']);
 	Route::delete('karyawan/{id}', [KaryawanController::class, 'destroy']);
+
+	// Route manage data penilaian
+	Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian');
+
+	// Route Ranking
+	Route::get('ranking', [RankingController::class, 'index'])->name('ranking');
 });

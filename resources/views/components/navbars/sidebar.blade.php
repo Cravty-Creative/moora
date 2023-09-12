@@ -22,6 +22,22 @@
           <span class="nav-link-text ms-1">Karyawan</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link text-white {{ $activePage == 'penilaian' ? 'active bg-gradient-info' : '' }} " href="{{ route('penilaian') }}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i style="font-size: 1.2rem;" class="fas fa-tasks ps-2 pe-2 text-center"></i>
+          </div>
+          <span class="nav-link-text ms-1">Penilaian</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white {{ $activePage == 'ranking' ? 'active bg-gradient-info' : '' }} " href="{{ route('ranking') }}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i style="font-size: 1.2rem;" class="fas fa-sort-amount-up-alt ps-2 pe-2 text-center"></i>
+          </div>
+          <span class="nav-link-text ms-1">Ranking</span>
+        </a>
+      </li>
     </ul>
   </div>
 </aside>

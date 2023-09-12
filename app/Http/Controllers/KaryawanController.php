@@ -168,11 +168,9 @@ class KaryawanController extends Controller
       $row[] = $item->user->role;
       $row[] = date('Y-m-d H:i:s', strtotime($item->created_at));
       $row[] = '<button type="button" class="btn btn-info btn-link" href="" data-original-title="" data_id="' . $item->id . '" title="" onclick="ShowDetail(this)">
-                  
                   <span class="ripple-container">Edit</span>
                 </button>
                 <button type="button" class="btn btn-danger btn-link" data-original-title="" data_id="' . $item->id . '" title="" onclick="Delete(this)">
-                  
                   <span class="ripple-container">Hapus</span>
                 </button>';
       $data[] = $row;
