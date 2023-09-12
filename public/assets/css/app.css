@@ -1,0 +1,30 @@
+#main-bg {
+  background-image: url('../img/office-dark.jpg');
+}
+
+/* .form-label {
+  color: var(--bs-info) !important;
+}
+.form-control {
+  border-color: var(--bs-info) !important;
+} */
+.form-control:focus {
+  border-color: var(--bs-info) !important;
+  box-shadow: inset 1px 0 var(--bs-info), inset -1px 0 var(--bs-info), inset 0 -1px var(--bs-info) !important;
+}
+
+.input-group.input-group-outline.is-focused .form-label + .form-control, .input-group.input-group-outline.is-filled .form-label + .form-control {
+  border-color: #1A73E8 !important;
+  border-top-color: transparent !important;
+  box-shadow: inset 1px 0 var(--bs-info), inset -1px 0 var(--bs-info), inset 0 -1px var(--bs-info);
+}
+
+.pagination .paginate_button.active .page-link {
+  background-color: var(--bs-info);
+  border-color: var(--bs-info);
+  color: #fff;
+}
+
+/* .navbar-brand-img {
+  filter: drop-shadow(1px 1px 1px white);
+} */
