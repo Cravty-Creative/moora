@@ -1,5 +1,6 @@
 var table;
 var operation = "add";
+var kriteria;
 jQuery(function() {
   table = $('#tablePenilaian').DataTable({
     // "responsive": true,
@@ -88,7 +89,7 @@ function RenderSelectKaryawan() {
     url: "/karyawanall",
     contentType: "application/json",
     success: function(data) {
-      console.log(data);
+      // console.log(data);
       if (data) {
         let select = $('#karyawan');
         let option = "";
@@ -118,12 +119,13 @@ function RenderFormNilai() {
     url: "/kriteriawithsubpoin",
     contentType: "application/json",
     success: function(data) {
-      console.log(data);
+      // console.log(data);
       if (data) {
+        kriteria = data;
         let container = $('#penilaian_form_div');
         let formHtml = "";
         data.forEach(kriteria => {
-          let h6 = '<h6 id="' + kriteria.kode + '">Nilai ' + kriteria.nama + ' (' + kriteria.kode + ')</h6>';
+          let h6 = '<h6>Nilai ' + kriteria.nama + ' (' + kriteria.kode + ')</h6>';
           let inputs = '<div class="d-flex gap-3">';
           let elem = 1;
           kriteria.sub_kriteria.forEach(sub_kriteria => {
@@ -134,7 +136,7 @@ function RenderFormNilai() {
             }
             let input_sub = '<div class="input-group input-group-outline my-3 flex-column">' +
                   '<label class"form-label ms-0">' + sub_kriteria.nama + ' (' + sub_kriteria.kode + ') *</label>' +
-                  '<select class="form-control w-100" id="' + sub_kriteria.kode + '">';
+                  '<select class="form-control w-100" id="' + sub_kriteria.kode.replace('.', '_') + '">';
             sub_kriteria.poin.forEach(poin => {
               let option = '<option value="' + poin.poin +'">' + poin.keterangan + '</option>';
               input_sub += option;
@@ -161,5 +163,77 @@ function RenderFormNilai() {
 }
 
 function SaveChanges() {
-  
+  $('#btn-save').text('Please wait...');
+  $('#btn-save').prop('disabled', true);
+
+  let id = 0;
+  let editUrl = "";
+  if (operation == "edit") {
+    id = parseInt($('#user_id').val());
+    editUrl = "/" + id;
+  }
+  let formData = new FormData();
+  formData.append('user_id', $('#karyawan').val());
+  formData.append('bulan', $('#bulan').val());
+  formData.append('tahun', $('#tahun').val());
+
+  kriteria.forEach(item => {
+    formData.append(item.kode + "_id", item.id);
+    item.sub_kriteria.forEach(sub => {
+      let select = $('#' + sub.kode.replace(".", "_"));
+      // console.log('#' + sub.kode.replace(".", "_"));
+      // console.log(select.val());
+      formData.append(sub.kode.replace('.', '_') + "_id", sub.id);
+      formData.append(sub.kode.replace('.', '_') + "_nilai", select.val());
+    });
+    formData.append(item.kode + "_length", item.sub_kriteria.length);
+  });
+
+  // Debug
+  console.log(kriteria);
+  // ShowFormDataEntries(formData);
+
+  $.ajax({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      type: "POST",
+      url:  "/penilaian" + editUrl,
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(data) {
+        if (data && data.code == 200) {
+          // ReloadTable();
+          // $('#PenilaianModal').modal('hide');
+          swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: data.message,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+          });
+        } else {
+          swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: data.message,
+            showConfirmButton: false,
+          });
+        }
+      },
+      error: function() {
+        swal.fire({
+          icon: 'error',
+          title: 'Internal Server Error',
+          text: "Ouch, sistemnya lagi error...",
+          showConfirmButton: false,
+        });
+      },
+      complete: function() {
+        $('#btn-save').text('Save Changes');
+        $('#btn-save').prop('disabled', false);
+      }
+  });
 }

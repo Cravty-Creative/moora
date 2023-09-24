@@ -48,7 +48,7 @@
                 </div>
                 <div class="input-group input-group-outline my-3 flex-column">
                   <label class="ms-0">Periode Tahun *</label>
-                  <input type="tel" class="form-control w-100" id="tahun" required>
+                  <input type="tel" class="form-control w-100" id="tahun" placeholder="2023" required>
                 </div>
               </div>
               <!-- Penilaian -->
