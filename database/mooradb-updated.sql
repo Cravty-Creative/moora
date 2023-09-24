@@ -73,10 +73,10 @@ CREATE TABLE IF NOT EXISTS `kriteria` (
 
 -- Dumping data for table mooradb.kriteria: ~4 rows (approximately)
 INSERT INTO `kriteria` (`id`, `kode`, `nama`, `type`, `bobot`, `rumus`) VALUES
-	(1, 'C1', 'Greeting', 'Benefit', 0.2, NULL),
-	(2, 'C2', 'Disiplin Kerapihan ', 'Benefit', 0.3, NULL),
-	(3, 'C3', 'Teknis Pekerjaan', 'Benefit', 0.4, NULL),
-	(4, 'C4', 'Absen', 'Benefit', 0.1, NULL);
+	(1, 'C1', 'Greeting', 'Benefit', 0.2, '(C1.1+C1.2)/2'),
+	(2, 'C2', 'Disiplin Kerapihan ', 'Benefit', 0.3, '(C2.1+C2.2+C2.3+C2.4+C2.5+C2.6+C2.7)/7'),
+	(3, 'C3', 'Teknis Pekerjaan', 'Benefit', 0.4, '(C3.1+C3.2+C3.3+C3.4+C3.5+C3.6+C3.7+C3.8)/8'),
+	(4, 'C4', 'Absen', 'Benefit', 0.1, 'C4');
 
 -- Dumping structure for table mooradb.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS `penilaian` (
   `id` int NOT NULL AUTO_INCREMENT,
   `id_karyawan` int NOT NULL,
   `id_kriteria` tinyint NOT NULL,
+  `periode` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `nilai` float NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -140,16 +141,71 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
 
 -- Dumping structure for table mooradb.poin
 CREATE TABLE IF NOT EXISTS `poin` (
-  `id` tinyint NOT NULL,
+  `id` tinyint NOT NULL AUTO_INCREMENT,
   `id_sub_kriteria` tinyint NOT NULL,
   `keterangan` varchar(45) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `poin` int DEFAULT NULL,
   PRIMARY KEY (`id`,`id_sub_kriteria`),
   KEY `fk_poin_sub_kriteria_idx` (`id_sub_kriteria`),
   CONSTRAINT `fk_poin_sub_kriteria` FOREIGN KEY (`id_sub_kriteria`) REFERENCES `sub_kriteria` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table mooradb.poin: ~0 rows (approximately)
+-- Dumping data for table mooradb.poin: ~54 rows (approximately)
+INSERT INTO `poin` (`id`, `id_sub_kriteria`, `keterangan`, `poin`) VALUES
+	(1, 1, '1. Sering digunakan', 50),
+	(2, 1, '2. Sudah tetapi jarang digunakan', 30),
+	(3, 1, '3. Belum menggunakan', 10),
+	(4, 2, '1. Sesuai', 50),
+	(5, 2, '2. Sesuai + Improvisasi', 30),
+	(6, 2, '3. Tidak Sesuai', 10),
+	(7, 3, '1. Tiba sebelum jam masuk', 50),
+	(8, 3, '2. Tiba tepat waktu', 30),
+	(9, 3, '3. Sering terlambat', 10),
+	(10, 4, '1. Setiap pergantian shift', 50),
+	(11, 4, '2. Pernah ', 30),
+	(12, 4, '3. Tidak Pernah', 10),
+	(13, 5, '1. Tidak Pernah', 50),
+	(14, 5, '2. Pernah', 30),
+	(15, 5, '3. Setiap pergantian shift', 10),
+	(16, 6, '1. Tidak pernah', 50),
+	(17, 6, '2. Pernah', 30),
+	(18, 6, '3. Setiap pergantian shift', 10),
+	(19, 7, '1. Sangat cepat sebelum dering kedua', 50),
+	(20, 7, '2. Setelah dering kedua', 30),
+	(21, 7, '3. Lebih dari dering ketiga', 10),
+	(22, 8, '1. Rapi dan sesuai', 50),
+	(23, 8, '2. Tidak rapi tetapi sesuai', 30),
+	(24, 8, '3. Rapi tetapi tidak sesuai', 10),
+	(25, 9, '1. Selalu ', 50),
+	(26, 9, '2. Jarang', 30),
+	(27, 9, '3. Tidak Pernah', 10),
+	(28, 10, '1. Langsung memahami', 50),
+	(29, 10, '2. Memahami namun banyak bertanya', 30),
+	(30, 10, '3. Tidak memahami dan harus eskalasi', 10),
+	(31, 11, '1. Sangat cepat', 50),
+	(32, 11, '2. Cepat', 30),
+	(33, 11, '3. Lambat', 10),
+	(34, 12, '1. Sangat efektif', 50),
+	(35, 12, '2. Efektif', 30),
+	(36, 12, '3. Tidak efektif', 10),
+	(37, 13, '1. Memadai (menguasai)', 50),
+	(38, 13, '2. Menguasai namun masih banyak bertanya', 30),
+	(39, 13, '3. Tidak memadai dan harus eskalasi', 10),
+	(40, 14, '1. Sering  setiap bertugas', 50),
+	(41, 14, '2. Jika diperlukan saja', 30),
+	(42, 14, '3. Jika diminta saja', 10),
+	(43, 15, '1. Sangat proaktif', 50),
+	(44, 15, '2. Kadang-kadang', 30),
+	(45, 15, '3. Hanya jika diminta', 10),
+	(46, 16, '1. Selalu ikut terlibat', 50),
+	(47, 16, '2. Kadang-kadang', 30),
+	(48, 16, '3. Tidak pernah', 10),
+	(49, 17, '1. Bisa diandalkan', 50),
+	(50, 17, '2. Masih banyak bertanya', 30),
+	(51, 17, '3. Hanya jadi pendengar', 10),
+	(52, 18, '1. Tidak hadir selain karena sakit <=3 hari', 50),
+	(53, 18, '2. Tidak hadir selain karena sakit  4-7 hari', 30),
+	(54, 18, '3. Tidak hadir selain karena sakit >=8 hari', 10);
 
 -- Dumping structure for table mooradb.sub_kriteria
 CREATE TABLE IF NOT EXISTS `sub_kriteria` (
@@ -161,9 +217,9 @@ CREATE TABLE IF NOT EXISTS `sub_kriteria` (
   PRIMARY KEY (`id`,`id_kriteria`),
   KEY `fk_sub_kriteria_kriteria_idx` (`id_kriteria`),
   CONSTRAINT `fk_sub_kriteria_kriteria` FOREIGN KEY (`id_kriteria`) REFERENCES `kriteria` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table mooradb.sub_kriteria: ~17 rows (approximately)
+-- Dumping data for table mooradb.sub_kriteria: ~18 rows (approximately)
 INSERT INTO `sub_kriteria` (`id`, `id_kriteria`, `kode`, `nama`, `detail`) VALUES
 	(1, 1, 'C1.1', 'Penggunaan Greeting', 'Apakah karyawan sudah menggunakan standard greetings pada saat melakukan atau menerima telepon dari customer baik internal maupun external.'),
 	(2, 1, 'C1.2', 'Kesesuaian Standar', 'Apakah standard greeting yang dilakukan karyawan sudah sesuai dengan standard instruksi kerja dari perusahaan.'),
@@ -181,7 +237,8 @@ INSERT INTO `sub_kriteria` (`id`, `id_kriteria`, `kode`, `nama`, `detail`) VALUE
 	(14, 3, 'C3.5', 'Update Log', 'Sesering apa karyawan dalam melakukan update log-log gangguan yang terjadi.'),
 	(15, 3, 'C3.6', 'Proaktif', 'Apakah karyawan proaktif dalam memberikan informasi dan update penanganan gangguan ke customer'),
 	(16, 3, 'C3.7', 'Keterlibatan Karyawan', 'Bagaimana keterlibatan karyawan jika ada gangguan masal'),
-	(17, 3, 'C3.8', 'Andil', 'Bagaimana andil karyawan dalam ikut menangani gangguan masal');
+	(17, 3, 'C3.8', 'Andil', 'Bagaimana andil karyawan dalam ikut menangani gangguan masal'),
+	(18, 4, 'C4', 'Absen', 'Absen Karyawan');
 
 -- Dumping structure for table mooradb.sub_penilaian
 CREATE TABLE IF NOT EXISTS `sub_penilaian` (
