@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RankingController;
@@ -51,8 +52,13 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.laravel-examples.user-profile');
 	})->name('user-profile');
 
+	// Route master data Kriteria
+	Route::get('kriteria', [KriteriaController::class, 'getAll']);
+	Route::get('kriteriawithsubpoin', [KriteriaController::class, 'getAllWithSubPoin']);
+
 	// Route manage data karyawan
 	Route::get('karyawan', [KaryawanController::class, 'index'])->name('karyawan');
+	Route::get('karyawanall', [KaryawanController::class, 'getAll']);
 	Route::get('karyawanDT', [KaryawanController::class, 'getList']);
 	Route::get('karyawan/{id}', [KaryawanController::class, 'show']);
 	Route::post('karyawan', [KaryawanController::class, 'create']);

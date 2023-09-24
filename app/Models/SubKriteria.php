@@ -28,4 +28,9 @@ class SubKriteria extends Model
   {
     return $this->belongsTo(Kriteria::class, 'id_kriteria', 'id');
   }
+
+  public function poin()
+  {
+    return $this->hasMany(Poin::class, 'id_sub_kriteria', 'id');
+  }
 }

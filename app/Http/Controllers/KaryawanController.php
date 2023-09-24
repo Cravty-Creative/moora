@@ -138,6 +138,19 @@ class KaryawanController extends Controller
     }
   }
 
+  public function getAll()
+  {
+    try {
+      $data = Karyawan::all();
+      return response()->json($data);
+    } catch (Exception $ex) {
+      return response()->json([
+        'code' => $ex->getCode(),
+        'message' => $ex->getMessage()
+      ]);
+    }
+  }
+
   public function getList(Request $req)
   {
     $countAll = Karyawan::query()->get()->count();

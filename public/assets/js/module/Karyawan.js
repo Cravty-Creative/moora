@@ -146,47 +146,47 @@ function ShowDetail(obj) {
   operation = "edit";
   let id = parseInt(obj.attributes.data_id.value);
   $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      type: "GET",
-      url: "/karyawan/" + id,
-      contentType: "application/json",
-      success: function(data) {
-        console.log(data);
-        if (!data.code) {
-          $('#id_karyawan').val(data.id);
-          $('#email').val(data.user.email);
-          $('#email').parent('.input-group').addClass('is-filled');
-          $('#username').val(data.user.username);
-          $('#username').parent('.input-group').addClass('is-filled');
-          $('#nama').val(data.nama);
-          $('#nama').parent('.input-group').addClass('is-filled');
-          $('#nik').val(data.nik);
-          $('#nik').parent('.input-group').addClass('is-filled');
-          $('#jabatan').val(data.jabatan);
-          $('#jabatan').parent('.input-group').addClass('is-filled');
-          $('#departemen').val(data.departemen);
-          $('#departemen').parent('.input-group').addClass('is-filled');
-          $('#KaryawanModal').modal('show');
-        } else {
-          swal.fire({
-            icon: 'error',
-            title: 'No Data',
-            text: 'Gagal memuat data',
-            showConfirmButton: false,
-          });
-        }
-      },
-      error: function() {
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: "GET",
+    url: "/karyawan/" + id,
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data);
+      if (!data.code) {
+        $('#id_karyawan').val(data.id);
+        $('#email').val(data.user.email);
+        $('#email').parent('.input-group').addClass('is-filled');
+        $('#username').val(data.user.username);
+        $('#username').parent('.input-group').addClass('is-filled');
+        $('#nama').val(data.nama);
+        $('#nama').parent('.input-group').addClass('is-filled');
+        $('#nik').val(data.nik);
+        $('#nik').parent('.input-group').addClass('is-filled');
+        $('#jabatan').val(data.jabatan);
+        $('#jabatan').parent('.input-group').addClass('is-filled');
+        $('#departemen').val(data.departemen);
+        $('#departemen').parent('.input-group').addClass('is-filled');
+        $('#KaryawanModal').modal('show');
+      } else {
         swal.fire({
           icon: 'error',
-          title: 'Internal Server Error',
-          text: "Ouch, sistemnya lagi error...",
+          title: 'No Data',
+          text: 'Gagal memuat data',
           showConfirmButton: false,
         });
       }
-    });
+    },
+    error: function() {
+      swal.fire({
+        icon: 'error',
+        title: 'Internal Server Error',
+        text: "Ouch, sistemnya lagi error...",
+        showConfirmButton: false,
+      });
+    }
+  });
 }
 
 function Delete(obj) {

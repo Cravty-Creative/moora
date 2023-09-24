@@ -21,4 +21,17 @@ class KriteriaController extends Controller
       ]);
     }
   }
+
+  public function getAllWithSubPoin()
+  {
+    try {
+      $data = Kriteria::query()->with('sub_kriteria', 'sub_kriteria.poin')->get();
+      return response()->json($data);
+    } catch (Exception $ex) {
+      return response()->json([
+        'code' => $ex->getCode(),
+        'message' => $ex->getMessage()
+      ]);
+    }
+  }
 }
