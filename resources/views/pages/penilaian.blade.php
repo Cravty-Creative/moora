@@ -53,44 +53,6 @@
               </div>
               <!-- Penilaian -->
               <div id="penilaian_form_div"></div>
-              <!-- <h6 id="C1">Nilai Greetings (C1)</h6>
-              <div class="d-flex gap-3">
-                <div class="input-group input-group-outline my-3">
-                  <label class="form-label">Penggunaan Greeting</label>
-                  <select class="form-control" id="C1.1">
-                    <option value="20">1. Sering Digunakan</option>
-                    <option value="15">2. Sudah Tetapi Jarang</option>
-                    <option value="8">3. Belum Digunakan</option>
-                  </select>
-                </div>
-                <div class="input-group input-group-outline my-3">
-                  <label class="form-label">Kesesuaian Standar</label>
-                  <select class="form-control" id="C1.2">
-                    <option value="20">1. Sesuai</option>
-                    <option value="15">2. Sesuai + Improvisasi</option>
-                    <option value="8">3. Tidak Sesuai</option>
-                  </select>
-                </div>
-              </div>
-              <h6 id="C2">Disiplin & Kerapihan (C2)</h6>
-              <div class="d-flex gap-3">
-                <div class="input-group input-group-outline my-3">
-                  <label class="form-label"></label>
-                  <select class="form-control" id="C2.1">
-                    <option value="20">1. Sering Digunakan</option>
-                    <option value="15">2. Sudah Tetapi Jarang</option>
-                    <option value="8">3. Belum Digunakan</option>
-                  </select>
-                </div>
-                <div class="input-group input-group-outline my-3">
-                  <label class="form-label">Kesesuaian Standar</label>
-                  <select class="form-control" id="C2.2">
-                    <option value="20">1. Sesuai</option>
-                    <option value="15">2. Sesuai + Improvisasi</option>
-                    <option value="8">3. Tidak Sesuai</option>
-                  </select>
-                </div>
-              </div> -->
             </form>
           </div>
           <div class="modal-footer">

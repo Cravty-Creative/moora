@@ -22,6 +22,8 @@ class PenilaianController extends Controller
   public function getList(Request $req)
   {
     try {
+      $countAll = Karyawan::query()->get()->count();
+      $queryData = Karyawan::query();
       
     } catch (Exception $ex) {
       return response()->json([
@@ -34,6 +36,7 @@ class PenilaianController extends Controller
   public function show($id)
   {
     try {
+      
     } catch (Exception $ex) {
       return response()->json([
         'code' => $ex->getCode(),
@@ -183,9 +186,9 @@ class PenilaianController extends Controller
         return response()->json([
           'message' => 'Berhasil menginput nilai karyawan'
         ], 200);
-      } catch (Exception $transEx) {
+      } catch (Exception $SqlEx) {
         DB::rollBack();
-        throw new Exception($transEx->getMessage(), StatusCode::HTTP_INTERNAL_SERVER_ERROR);
+        throw new Exception($SqlEx->getMessage(), StatusCode::HTTP_INTERNAL_SERVER_ERROR);
       }
     } catch (Exception $ex) {
       return response()->json([
