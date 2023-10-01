@@ -22,7 +22,7 @@ jQuery(function() {
       "targets": 5
     }, ],
     "ajax": {
-      "url": $('meta[name="route"]').attr('content') + "/karyawanDT",
+      "url": $('meta[name="route"]').attr('content') + "/penilaianDT",
       "headers": {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
@@ -46,11 +46,11 @@ jQuery(function() {
     e.preventDefault();
     let filter = [];
     if ($('#filternama').val()) filter.push("nama=" + $('#filternama').val());
-    if ($('#filternik').val()) filter.push("nik=" + $('#filternik').val());
-    if ($('#filterjabatan').val()) filter.push("jabatan=" + $('#filterjabatan').val());
+    if ($('#filterbulan').val()) filter.push("bulan=" + $('#filterbulan').val());
+    if ($('#filtertahun').val()) filter.push("tahun=" + $('#filtertahun').val());
     if ($('#filterdepartemen').val()) filter.push("departemen=" + $('#filterdepartemen').val());
     let params = filter.join('&');
-    let url = $('meta[name="route"]').attr('content') + "/karyawanDT?" + params;
+    let url = $('meta[name="route"]').attr('content') + "/penilaianDT?" + params;
     generateTable(url);
   });
 });
@@ -65,13 +65,13 @@ function generateTable(url) {
 
 $('#PenilaianModal').on('hidden.bs.modal', function () {
   operation = "add";
-  // $('#username').val('').parent('.input-group').removeClass('is-filled');
-  // $('#email').val('').parent('.input-group').removeClass('is-filled');
-  // $('#password').val('').parent('.input-group').removeClass('is-filled');
-  // $('#nama').val('').parent('.input-group').removeClass('is-filled');
-  // $('#nik').val('').parent('.input-group').removeClass('is-filled');
-  // $('#jabatan').val('').parent('.input-group').removeClass('is-filled');
-  // $('#departemen').val('').parent('.input-group').removeClass('is-filled');
+  $('#karyawan').val('');
+  kriteria.forEach(item => {
+    item.sub_kriteria.forEach(sub => {
+      let select = $('#' + sub.kode.replace(".", "_"));
+      select.val('50');
+    });
+  });
 });
 
 $('#btn-add-penilaian').on('click', function(e) {
@@ -191,7 +191,7 @@ function SaveChanges() {
 
   // Debug
   console.log(kriteria);
-  // ShowFormDataEntries(formData);
+  ShowFormDataEntries(formData);
 
   $.ajax({
     headers: {
@@ -204,8 +204,8 @@ function SaveChanges() {
       contentType: false,
       success: function(data) {
         if (data && data.code == 200) {
-          // ReloadTable();
-          // $('#PenilaianModal').modal('hide');
+          ReloadTable();
+          $('#PenilaianModal').modal('hide');
           swal.fire({
             icon: 'success',
             title: 'Berhasil',
@@ -235,5 +235,40 @@ function SaveChanges() {
         $('#btn-save').text('Save Changes');
         $('#btn-save').prop('disabled', false);
       }
+  });
+}
+
+function ShowDetail(obj) {
+  // operation = "edit";
+  let id = parseInt(obj.attributes.data_id.value);
+  $.ajax({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    type: "GET",
+    url: "/penilaian/" + id,
+    contentType: "application/json",
+    success: function(data) {
+      console.log(data);
+      if (!data.code) {
+        $('#id_karyawan').val(data.id);
+        // $('#PenilaianModal').modal('show');
+      } else {
+        swal.fire({
+          icon: 'error',
+          title: 'No Data',
+          text: 'Gagal memuat data',
+          showConfirmButton: false,
+        });
+      }
+    },
+    error: function() {
+      swal.fire({
+        icon: 'error',
+        title: 'Internal Server Error',
+        text: "Ouch, sistemnya lagi error...",
+        showConfirmButton: false,
+      });
+    }
   });
 }

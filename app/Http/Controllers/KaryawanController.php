@@ -178,6 +178,7 @@ class KaryawanController extends Controller
       $row[] = $item->kode;
       $row[] = $item->nama;
       $row[] = $item->user->email;
+      $row[] = $item->departemen;
       $row[] = $item->user->role;
       $row[] = date('Y-m-d H:i:s', strtotime($item->created_at));
       $row[] = '<button type="button" class="btn btn-info btn-link" href="" data-original-title="" data_id="' . $item->id . '" title="" onclick="ShowDetail(this)">

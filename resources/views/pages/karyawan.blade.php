@@ -130,6 +130,8 @@
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
                       EMAIL</th>
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                      DEPARTEMEN</th>
+                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
                       ROLE</th>
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
                       CREATION DATE

@@ -75,7 +75,7 @@
             <!-- Header Filter -->
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-white shadow-dark border-radius-lg pt-4 pb-3">
-                <h6 class="mx-2 px-2">Filter Data Karyawan</h6>
+                <h6 class="mx-2 px-2">Filter Data Ranking Karyawan</h6>
                 <!-- Form Filter -->
                 <form class="mx-2 px-2 text-start" action="" method="post" id="report">
                   <div class="row mb-3">
@@ -85,22 +85,35 @@
                         <input type="text" class="form-control" name="filternama" id="filternama">
                       </div>
                     </div>
-                    <div class="col-md-3 col-xs-12">
-                      <div class="input-group input-group-outline">
-                        <label for="filternik" class="form-label" style="color: grey !important;">NIK</label>
-                        <input type="text" class="form-control" name="filternik" id="filternik">
-                      </div>
-                    </div>
-                    <div class="col-md-3 col-xs-12">
-                      <div class="input-group input-group-outline">
-                        <label for="filterjabatan" class="form-label" style="color: grey !important;">Jabatan</label>
-                        <input type="text" class="form-control" name="filterjabatan" id="filterjabatan">
-                      </div>
-                    </div>
                     <div class="col-md-2 col-xs-12">
                       <div class="input-group input-group-outline">
                         <label for="filterdepartemen" class="form-label" style="color: grey !important;">Departemen</label>
                         <input type="text" class="form-control" name="filterdepartemen" id="filterdepartemen">
+                      </div>
+                    </div>
+                    <div class="col-md-3 col-xs-12">
+                      <div class="input-group input-group-outline">
+                        <select class="form-control" name="filterbulan" id="filterbulan">
+                          <option value="">Pilih Periode Bulan</option>
+                          <option value="Januari">Januari</option>
+                          <option value="Februari">Februari</option>
+                          <option value="Maret">Maret</option>
+                          <option value="April">April</option>
+                          <option value="Mei">Mei</option>
+                          <option value="Juni">Juni</option>
+                          <option value="July">July</option>
+                          <option value="Agustus">Agustus</option>
+                          <option value="September">September</option>
+                          <option value="Oktober">Oktober</option>
+                          <option value="November">November</option>
+                          <option value="Desember">Desember</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-3 col-xs-12">
+                      <div class="input-group input-group-outline">
+                        <label for="filtertahun" class="form-label" style="color: grey !important;">Tahun</label>
+                        <input type="tel" class="form-control w-100" id="filtertahun" required>
                       </div>
                     </div>
                     <div class="col-md-1 col-xs-12 my-auto">
@@ -120,7 +133,7 @@
                 <thead>
                   <tr>
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
-                      NO
+                      RANK
                     </th>
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
                       ID
@@ -128,14 +141,11 @@
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
                       NAMA</th>
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
-                      EMAIL</th>
+                      TITLE</th>
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
-                      ROLE</th>
+                      DEPARTEMEN</th>
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
-                      CREATION DATE
-                    </th>
-                    <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
-                      ACTION
+                      NILAI
                     </th>
                   </tr>
                 </thead>

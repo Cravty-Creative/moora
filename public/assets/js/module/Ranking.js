@@ -21,7 +21,7 @@ jQuery(function() {
       "targets": 5
     }, ],
     "ajax": {
-      "url": $('meta[name="route"]').attr('content') + "/karyawanDT",
+      "url": $('meta[name="route"]').attr('content') + "/rankingDT",
       "headers": {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
@@ -33,20 +33,15 @@ jQuery(function() {
     page: 'all'
   }).data();
 
-  $('#KaryawanModal').modal({
-    backdrop: 'static',
-    keyboard: false
-  });
-
   $("#report").on('submit', function (e) {
     e.preventDefault();
     let filter = [];
     if ($('#filternama').val()) filter.push("nama=" + $('#filternama').val());
-    if ($('#filternik').val()) filter.push("nik=" + $('#filternik').val());
-    if ($('#filterjabatan').val()) filter.push("jabatan=" + $('#filterjabatan').val());
+    if ($('#filterbulan').val()) filter.push("bulan=" + $('#filterbulan').val());
+    if ($('#filtertahun').val()) filter.push("tahun=" + $('#filtertahun').val());
     if ($('#filterdepartemen').val()) filter.push("departemen=" + $('#filterdepartemen').val());
     let params = filter.join('&');
-    let url = $('meta[name="route"]').attr('content') + "/karyawanDT?" + params;
+    let url = $('meta[name="route"]').attr('content') + "/rankingDT?" + params;
     generateTable(url);
   });
 });

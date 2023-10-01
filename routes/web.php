@@ -76,4 +76,5 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Route Ranking
 	Route::get('ranking', [RankingController::class, 'index'])->name('ranking');
+	Route::get('rankingDT', [RankingController::class, 'getList']);
 });
