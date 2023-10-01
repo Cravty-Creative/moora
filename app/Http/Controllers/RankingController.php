@@ -78,17 +78,46 @@ class RankingController extends Controller
         $item->nilai_optimum = round($nilai_optimum, 8);
         $optimum[$item->kode] = round($nilai_optimum, 8);
       }
+      // Menentukan Ranking
+      // Copy data ke array baru
+      $data_ranking = array();
+      foreach ($queryData as $item) {
+        $row_data = array();
+        $row_data['id'] = $item->id;
+        $row_data['kode'] = $item->kode;
+        $row_data['nama'] = $item->nama;
+        $row_data['title'] = $item->jabatan;
+        $row_data['departemen'] = $item->departemen;
+        $row_data['nilai'] = $item->nilai_optimum;
+        $data_ranking[] = $row_data;
+      }
+      // Mengurutkan Ranking
+      array_multisort(array_column($data_ranking, 'nilai'), SORT_DESC, $data_ranking);
 
-      // return response()->json($queryData);
+      // generate menjadi DataTable
+      $data = array();
+      $rank_number = 1;
+      foreach ($data_ranking as $item) {
+        $row = array();
+        $row[] = $rank_number++;
+        $row[] = $item['kode'];
+        $row[] = $item['nama'];
+        $row[] = $item['title'];
+        $row[] = $item['departemen'];
+        $row[] = $item['nilai'];
+        $data[] = $row;
+      }
+
       return response()->json([
         "draw" => $req->draw ?: 10,
         "recordsTotal" => $countAll,
         "recordsFiltered" => $countAll,
-        "data" => [],
+        "data" => $data,
         "sum_pangkat" => $sum_pangkat,
         "pembagi" => $pembagi,
         "normalisasi" => $normalisasi,
         "nilai_optimum" => $optimum,
+        "data_ranking" => $data_ranking,
         "kriteria" => $kriteria,
         "karyawan" => $queryData
       ]);

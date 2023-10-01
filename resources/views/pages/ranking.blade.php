@@ -125,9 +125,6 @@
               </div>
             </div>
             <!-- / Header Filter -->
-            <div class=" me-3 my-3 text-end">
-              <a class="btn bg-gradient-success mb-0" href="javascript:;" id="btn-add-karyawan"><i class="material-icons text-sm">add</i>&nbsp;&nbsp;Tambah</a>
-            </div>
             <div class="card-body mx-4 my-4 px-2 pb-2">
               <table class="table table table-striped w-100" id="tableRanking">
                 <thead>
