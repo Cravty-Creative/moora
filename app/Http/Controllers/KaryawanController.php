@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response as StatusCode;
+use Illuminate\Support\Facades\Hash;
 
 class KaryawanController extends Controller
 {
@@ -106,7 +107,7 @@ class KaryawanController extends Controller
           'role' => Role::Karyawan,
           'username' => $req->username,
           'email' => $req->email,
-          'password' => Crypt::encrypt($req->password),
+          'password' => Hash::make($req->password),
           'created_at' => DateTime::Now()
         ];
         $iduser = User::create($newUser)->id;
@@ -256,7 +257,7 @@ class KaryawanController extends Controller
         User::query()->where('id', '=', $data->user->id)->update([
           'username' => $req->username,
           'email' => $req->email,
-          'password' => Crypt::encrypt($req->password),
+          'password' => Hash::make($req->password),
           'updated_at' => DateTime::Now(),
         ]);
         DB::commit();

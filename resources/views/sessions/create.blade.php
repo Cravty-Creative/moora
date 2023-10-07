@@ -53,14 +53,14 @@
                                     @endif
                                     <div class="input-group input-group-outline mt-3">
                                         <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" name="email" value="{{ 'admin@moora.com' }}">
+                                        <input type="email" class="form-control" name="email">
                                     </div>
                                     @error('email')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
                                     @enderror
                                     <div class="input-group input-group-outline mt-3">
                                         <label class="form-label">Password</label>
-                                        <input type="text" class="form-control" name="password" value='{{ 'secret' }}'>
+                                        <input type="password" class="form-control" name="password">
                                     </div>
                                     @error('password')
                                     <p class='text-danger inputerror'>{{ $message }} </p>
@@ -73,15 +73,10 @@
                                     <div class="text-center">
                                         <button type="submit" class="btn bg-gradient-info w-100 my-4 mb-2">Login</button>
                                     </div>
-                                    <!-- <p class="mt-4 text-sm text-center">
-                                        Don't have an account?
-                                        <a href="{{ route('register') }}"
-                                            class="text-primary text-gradient font-weight-bold">Sign up</a>
-                                    </p> -->
-                                    <p class="text-sm text-center">
+                                    <!-- <p class="text-sm text-center">
                                         Lupa password? Reset password
                                         <a href="{{ route('verify') }}" class="text-info text-gradient font-weight-bold">disini</a>
-                                    </p>
+                                    </p> -->
                                 </form>
                             </div>
                         </div>

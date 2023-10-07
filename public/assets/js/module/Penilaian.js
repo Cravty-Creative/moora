@@ -239,7 +239,8 @@ function SaveChanges() {
 }
 
 function ShowDetail(obj) {
-  // operation = "edit";
+  operation = "edit";
+  $('#PenilaianModalLabel').text('Edit Nilai Karyawan');
   let id = parseInt(obj.attributes.data_id.value);
   $.ajax({
     headers: {
@@ -252,7 +253,22 @@ function ShowDetail(obj) {
       console.log(data);
       if (!data.code) {
         $('#id_karyawan').val(data.id);
-        // $('#PenilaianModal').modal('show');
+        $('#karyawan').val(data.user_id);
+        const fullPeriode = data.penilaian[0].periode.split(" ");
+        let periode = fullPeriode[0];
+        let tahun = fullPeriode[1];
+        $('#bulan').val(periode);
+        $('#tahun').val(tahun);
+        let i = 1;
+        data.penilaian.forEach(item => {
+          let j = 1;
+          item.sub_penilaian.forEach(sub => {
+            $('#C' + i + "_" + j).val(sub.nilai);
+            j++;
+          });
+          i++;
+        });
+        $('#PenilaianModal').modal('show');
       } else {
         swal.fire({
           icon: 'error',
@@ -268,6 +284,66 @@ function ShowDetail(obj) {
         title: 'Internal Server Error',
         text: "Ouch, sistemnya lagi error...",
         showConfirmButton: false,
+      });
+    }
+  });
+}
+
+function Delete(obj) {
+  let id = parseInt(obj.attributes.data_id.value);
+  let periode = obj.attributes.data_periode.value;
+  swal.fire({
+    title: 'Hapus Data Penilaian Karyawan',
+    text: "Apakah Anda yakin ingin menghapus data nilai karyawan ini pada periode " +  periode + "?",
+    icon: 'warning',
+    showCancelButton: true,
+    showLoaderOnConfirm: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Hapus',
+    cancelButtonText: 'Batal',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let formData = new FormData();
+      formData.append('user_id', id);
+      formData.append('periode', periode);
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: "POST",
+        url: "/penilaian/delete",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          if (data && data.code == 200) {
+            ReloadTable();
+            swal.fire({
+              icon: 'success',
+              title: 'Sukses',
+              text: data.message,
+              showConfirmButton: false,
+              timer: 2000,
+              timerProgressBar: true
+            });
+          } else {
+            swal.fire({
+              icon: 'error',
+              title: 'Gagal',
+              text: data.message,
+              showConfirmButton: false,
+            });
+          }
+        },
+        error: function() {
+          swal.fire({
+            icon: 'error',
+            title: 'Internal Server Error',
+            text: "Ouch, sistemnya lagi error...",
+            showConfirmButton: false,
+          });
+        }
       });
     }
   });

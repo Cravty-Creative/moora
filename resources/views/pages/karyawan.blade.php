@@ -34,9 +34,9 @@
               <div class="d-flex gap-3">
                 <div class="input-group input-group-outline my-3">
                   <label class="form-label">Password *</label>
-                  <input type="text" class="form-control" id="password" required>
+                  <input type="text" class="form-control" id="password" title="Menggunakan password hashing" required>
                 </div>
-                <div class="input-group input-group-outline my-3">
+                <div class="input-group input-group-outline my-3">  
                   <label class="form-label">Nama Karyawan *</label>
                   <input type="text" class="form-control" id="nama" required>
                 </div>

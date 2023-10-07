@@ -71,7 +71,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penilaian/{id}', [PenilaianController::class, 'show']);
 	Route::post('penilaian', [PenilaianController::class, 'create']);
 	Route::post('penilaian/{id}', [PenilaianController::class, 'update']);
-	Route::delete('penilaian/{id}', [PenilaianController::class, 'destroy']);
+	Route::post('penilaian/delete', [PenilaianController::class, 'destroy']);
 
 
 	// Route Ranking
