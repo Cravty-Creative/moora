@@ -124,6 +124,7 @@
             <div class=" me-3 my-3 text-end">
               <a class="btn bg-gradient-success mb-0" href="javascript:;" id="btn-add-penilaian"><i class="material-icons text-sm">add</i>&nbsp;&nbsp;Tambah</a>
             </div>
+            <h4 id="periode_penilaian"></h4>
             <div class="card-body mx-4 my-4 px-2 pb-2">
               <table class="table table table-striped w-100" id="tablePenilaian">
                 <thead>
@@ -138,14 +139,16 @@
                       NAMA</th>
                     <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
                       DEPARTEMEN</th>
-                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">
+                      PERIODE</th>
+                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-3">
                       NILAI C1</th>
-                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-3">
                       NILAI C2</th>
-                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-3">
                       NILAI C3
                     </th>
-                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                    <th scope="col" class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-3">
                       NILAI C4
                     </th>
                     <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">

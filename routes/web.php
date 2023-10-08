@@ -68,10 +68,10 @@ Route::group(['middleware' => 'auth'], function () {
 	// Route manage data penilaian
 	Route::get('penilaian', [PenilaianController::class, 'index'])->name('penilaian');
 	Route::get('penilaianDT', [PenilaianController::class, 'getList']);
-	Route::get('penilaian/{id}', [PenilaianController::class, 'show']);
+	Route::post('showpenilaian', [PenilaianController::class, 'show']);
 	Route::post('penilaian', [PenilaianController::class, 'create']);
 	Route::post('penilaian/{id}', [PenilaianController::class, 'update']);
-	Route::post('penilaian/delete', [PenilaianController::class, 'destroy']);
+	Route::post('deletepenilaian', [PenilaianController::class, 'destroy']);
 
 
 	// Route Ranking

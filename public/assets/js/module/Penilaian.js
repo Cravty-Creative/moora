@@ -66,6 +66,8 @@ function generateTable(url) {
 $('#PenilaianModal').on('hidden.bs.modal', function () {
   operation = "add";
   $('#karyawan').val('');
+  $('#bulan').val('');
+  $('#periode').val('');
   kriteria.forEach(item => {
     item.sub_kriteria.forEach(sub => {
       let select = $('#' + sub.kode.replace(".", "_"));
@@ -242,18 +244,22 @@ function ShowDetail(obj) {
   operation = "edit";
   $('#PenilaianModalLabel').text('Edit Nilai Karyawan');
   let id = parseInt(obj.attributes.data_id.value);
+  let periode = obj.attributes.data_periode.value;
+  let data = { "id": id, "periode": periode };
   $.ajax({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
-    type: "GET",
-    url: "/penilaian/" + id,
+    type: "POST",
+    // url: "/penilaian/" + id + "/" + periode,
+    data: JSON.stringify(data),
+    url: "/showpenilaian",
     contentType: "application/json",
     success: function(data) {
       console.log(data);
       if (!data.code) {
-        $('#id_karyawan').val(data.id);
-        $('#karyawan').val(data.user_id);
+        $('#id_karyawan').val(data.karyawan.id);
+        $('#karyawan').val(data.karyawan.user_id);
         const fullPeriode = data.penilaian[0].periode.split(" ");
         let periode = fullPeriode[0];
         let tahun = fullPeriode[1];
@@ -305,14 +311,14 @@ function Delete(obj) {
   }).then((result) => {
     if (result.isConfirmed) {
       let formData = new FormData();
-      formData.append('user_id', id);
+      formData.append('id_karyawan', id);
       formData.append('periode', periode);
       $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         type: "POST",
-        url: "/penilaian/delete",
+        url: "/deletepenilaian",
         data: formData,
         processData: false,
         contentType: false,

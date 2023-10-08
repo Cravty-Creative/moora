@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DateTime;
 use App\Models\Karyawan;
 use App\Models\Kriteria;
 use App\Models\Penilaian;
@@ -22,20 +23,26 @@ class RankingController extends Controller
   public function getList(Request $req)
   {
     try {
+      $periode = DateTime::BulanTahun(date('Y-m-d'));
+      if ($req->has('bulan') && !empty($req->bulan) && $req->has('tahun') && !empty($req->tahun)) {
+        $periode = $req->bulan . " " . $req->tahun;
+      }
       // Ambil data kriteria
       $kriteria = Kriteria::query()->get();
       $countAll = Karyawan::query()->get()->count();
       $queryData = Karyawan::query();
       // Get All Data karyawan sesuai periode penilaian
-      $queryData = Karyawan::query()->with('penilaian', 'penilaian.sub_penilaian')->whereHas('penilaian', function ($subquery) use ($req) {
-        if ($req->has('bulan') && !empty($req->bulan) && $req->has('tahun') && !empty($req->tahun)) {
-          $subquery->where('periode', 'LIKE', '%' . $req->bulan . " " . $req->tahun . '%');
-        }
-      });
+      // $queryData = Karyawan::query()->with('penilaian', 'penilaian.sub_penilaian')->whereHas('penilaian', function ($subquery) use ($periode) {
+      //   $subquery->where('periode', '=', $periode);
+      // });
       if ($req->has('departemen') && !empty($req->departemen)) {
-        $queryData->where('departemen', 'LIKE', '%' . $req->departemen . '%');
+        $queryData->where('departemen', '=', '%' . $req->departemen . '%');
       }
       $queryData = $queryData->orderBy('kode', 'ASC')->get();
+      foreach ($queryData as $item) {
+        $item->penilaian =
+          Penilaian::query()->where('id_karyawan', '=', $item->id)->where('periode', '=', $periode)->with('sub_penilaian')->get();
+      }
       // dd($queryData);
       /**
        * Perhitungan Ranking berdasarkan rumus Moora

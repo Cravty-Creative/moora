@@ -19,14 +19,19 @@ class PenilaianController extends Controller
     return view('pages.penilaian');
   }
 
-  // Notes: ada bug data ga nampil setelah add
+  // Notes: Data tampil hanya sesuai periode yang dipilih
   public function getList(Request $req)
   {
     try {
       $countAll = Karyawan::query()->get()->count();
       $queryData = Karyawan::query();
       // Join ke penilaian dan filter
-      $queryData = $queryData->with('penilaian')->whereHas('penilaian', function ($subquery) use ($req) {
+      $queryData = $queryData->with('penilaian', function ($subquery) use ($req) {
+        if ($req->has('bulan') && !empty($req->bulan) && $req->has('tahun') && !empty($req->tahun)) {
+          $subquery->where('periode', 'LIKE', '%' . $req->bulan . " " . $req->tahun . '%');
+        }
+      })
+      ->whereHas('penilaian', function ($subquery) use ($req) {
         if ($req->has('bulan') && !empty($req->bulan) && $req->has('tahun') && !empty($req->tahun)) {
           $subquery->where('periode', 'LIKE', '%' . $req->bulan . " " . $req->tahun . '%');
         }
@@ -48,11 +53,12 @@ class PenilaianController extends Controller
         $row[] = $item->kode;
         $row[] = $item->nama;
         $row[] = $item->departemen;
+        $row[] = $item->penilaian[0]->periode;
         $row[] = $item->penilaian[0]->nilai;
         $row[] = $item->penilaian[1]->nilai;
         $row[] = $item->penilaian[2]->nilai;
         $row[] = $item->penilaian[3]->nilai;
-        $row[] = '<button type="button" class="btn btn-info btn-link" href="" data-original-title="" data_id="' . $item->id . '" title="" onclick="ShowDetail(this)">
+        $row[] = '<button type="button" class="btn btn-info btn-link" href="" data-original-title="" data_id="' . $item->id . '" data_periode="' . $item->penilaian[0]->periode . '" title="" onclick="ShowDetail(this)">
                   <span class="ripple-container">Edit</span>
                 </button>
                 <button type="button" class="btn btn-danger btn-link" data-original-title="" data_id="' . $item->id . '" data_periode="' . $item->penilaian[0]->periode . '" title="" onclick="Delete(this)">
@@ -74,10 +80,16 @@ class PenilaianController extends Controller
     }
   }
 
-  public function show($id)
+  public function show(Request $req)
   {
     try {
-      $data = Karyawan::query()->where('id', '=', $id)->with('penilaian', 'penilaian.sub_penilaian')->first();
+      $dataPenilaian = Penilaian::query()->where('id_karyawan', '=', $req->id)->where('periode', '=', $req->periode)
+                        ->with('sub_penilaian')->get();
+      $dataKaryawan = Karyawan::query()->where('id', '=', $req->id)->first();
+      $data = [
+        'karyawan' => $dataKaryawan,
+        'penilaian' => $dataPenilaian
+      ];
       if (empty($data)) throw new Exception("No Data", StatusCode::HTTP_NOT_FOUND);
 
       return response()->json($data);
@@ -101,6 +113,11 @@ class PenilaianController extends Controller
       $queryKaryawan = Karyawan::query()->where('user_id', '=', $req->user_id);
       $dataKaryawan = $queryKaryawan->with('user')->first();
       if (empty($dataKaryawan)) throw new Exception("No Data", StatusCode::HTTP_NOT_FOUND);
+
+      $periode = $req->bulan . " " . $req->tahun;
+      // Validasi data duplicate
+      $checkPenilaian = Penilaian::query()->where('id_karyawan', '=', $dataKaryawan->id)->where('periode', '=', $periode)->get();
+      if ($checkPenilaian->count() > 0) throw new Exception("Data penilaian karyawan " . $dataKaryawan->nama . " pada periode " . $periode . " sudah ada", StatusCode::HTTP_UNPROCESSABLE_ENTITY);
 
       // Mengambil data kriteria
       $dataKriteria = Kriteria::query()->get();
@@ -130,7 +147,7 @@ class PenilaianController extends Controller
             'id_karyawan' => $dataKaryawan->id,
             'id_kriteria' => $data['C' . $index . '_id'],
             'nilai' => $nilai['C' . $index],
-            'periode' => $req->bulan . " " . $req->tahun,
+            'periode' => $periode,
           ]);
           // Input Sub-Nilai Karyawan
           for ($i = 1; $i <= intval($data['C' . $index . '_length']); $i++) {
@@ -231,12 +248,11 @@ class PenilaianController extends Controller
     }
   }
 
-  // Masih bug gagal hapus
   public function destroy(Request $req)
   {
     try {
       // Mengambil data Karyawan
-      $dataKaryawan = Karyawan::query()->where('user_id', '=', $req->user_id)->with('user')->first();
+      $dataKaryawan = Karyawan::query()->where('id', '=', $req->id_karyawan)->first();
       if (empty($dataKaryawan)) throw new Exception("No Data", StatusCode::HTTP_NOT_FOUND);
 
       // Delete smua data penilaian karyawan tsb
@@ -247,7 +263,7 @@ class PenilaianController extends Controller
       
       return response()->json([
         'code' => StatusCode::HTTP_OK,
-        'message' => 'Success'
+        'message' => 'Delete Success'
       ]);
     } catch (Exception $ex) {
       return response()->json([
