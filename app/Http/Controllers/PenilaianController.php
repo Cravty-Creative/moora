@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DateTime;
 use App\Models\Karyawan;
 use App\Models\Kriteria;
 use App\Models\Penilaian;
@@ -23,18 +24,18 @@ class PenilaianController extends Controller
   public function getList(Request $req)
   {
     try {
+      $periode = DateTime::BulanTahun(date('Y-m-d'));
+      if ($req->has('bulan') && !empty($req->bulan) && $req->has('tahun') && !empty($req->tahun)) {
+        $periode = $req->bulan . " " . $req->tahun;
+      }
       $countAll = Karyawan::query()->get()->count();
       $queryData = Karyawan::query();
       // Join ke penilaian dan filter
-      $queryData = $queryData->with('penilaian', function ($subquery) use ($req) {
-        if ($req->has('bulan') && !empty($req->bulan) && $req->has('tahun') && !empty($req->tahun)) {
-          $subquery->where('periode', 'LIKE', '%' . $req->bulan . " " . $req->tahun . '%');
-        }
+      $queryData = $queryData->with('penilaian', function ($subquery) use ($periode) {
+        $subquery->where('periode', '=', $periode);
       })
-      ->whereHas('penilaian', function ($subquery) use ($req) {
-        if ($req->has('bulan') && !empty($req->bulan) && $req->has('tahun') && !empty($req->tahun)) {
-          $subquery->where('periode', 'LIKE', '%' . $req->bulan . " " . $req->tahun . '%');
-        }
+      ->whereHas('penilaian', function ($subquery) use ($periode) {
+        $subquery->where('periode', '=', $periode);
       });
       // Filter Karyawan
       if ($req->has('nama') && !empty($req->nama)) {
@@ -185,13 +186,15 @@ class PenilaianController extends Controller
       }
 
       // Mengambil data Karyawan
-      $queryKaryawan = Karyawan::query()->where('user_id', '=', $id);
+      $queryKaryawan = Karyawan::query()->where('id', '=', $id);
       $dataKaryawan = $queryKaryawan->with('user')->first();
       if (empty($dataKaryawan)) throw new Exception("No Data", StatusCode::HTTP_NOT_FOUND);
 
       // Mengambil data kriteria
       $dataKriteria = Kriteria::query()->get();
       $countKriteria = $dataKriteria->count();
+
+      $periode = $req->bulan . " " . $req->tahun;
 
       // Debug
       // dd($req->all());
@@ -208,23 +211,26 @@ class PenilaianController extends Controller
       // Nilai C4
       $nilai['C4'] = round(floatval($data['C4_1_nilai']));
 
-      // Update nilai ke database
+      // Delete smua data penilaian karyawan tsb
+      Penilaian::query()
+        ->where('id_karyawan', '=', $dataKaryawan->id)
+        ->where('periode', '=', $periode)
+        ->delete();
+      
+      // Inser nilai baru ke database
       DB::beginTransaction();
       try {
         for ($index = 1; $index <= $countKriteria; $index++) {
           // Input Nilai Karyawan
-          $update = Penilaian::query()
-            ->where('id_karyawan', '=', $dataKaryawan->id)
-            ->where()
-            ->update([
-              'id_karyawan' => $dataKaryawan->id,
-              'id_kriteria' => $data['C' . $index . '_id'],
-              'nilai' => $nilai['C' . $index],
-              'periode' => $req->bulan . " " . $req->tahun,
-            ]);
+          $insert = Penilaian::create([
+            'id_karyawan' => $dataKaryawan->id,
+            'id_kriteria' => $data['C' . $index . '_id'],
+            'nilai' => $nilai['C' . $index],
+            'periode' => $periode,
+          ]);
           // Input Sub-Nilai Karyawan
           for ($i = 1; $i <= intval($data['C' . $index . '_length']); $i++) {
-            SubPenilaian::query()->where()->update([
+            SubPenilaian::create([
               'id_penilaian' => $insert->id,
               'id_sub_kriteria' => $data['C' . $index . '_' . $i . '_id'],
               'nilai' => $data['C' . $index . '_' . $i . '_nilai'],

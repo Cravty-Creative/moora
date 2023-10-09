@@ -111,7 +111,7 @@ class RankingController extends Controller
         $row[] = $item['nama'];
         $row[] = $item['title'];
         $row[] = $item['departemen'];
-        $row[] = $item['nilai'];
+        $row[] = $item['nilai'] == 0 ? "<span class='badge bg-gradient-danger'>Nilai belum di input</span>" : $item['nilai'];
         $data[] = $row;
       }
 

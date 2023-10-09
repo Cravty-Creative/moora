@@ -65,9 +65,12 @@ function generateTable(url) {
 
 $('#PenilaianModal').on('hidden.bs.modal', function () {
   operation = "add";
+  $('#karyawan').attr('disabled', false);
+  $('#bulan').attr('disabled', false);
+  $('#tahun').attr('disabled', false);
   $('#karyawan').val('');
   $('#bulan').val('');
-  $('#periode').val('');
+  $('#tahun').val('');
   kriteria.forEach(item => {
     item.sub_kriteria.forEach(sub => {
       let select = $('#' + sub.kode.replace(".", "_"));
@@ -171,7 +174,7 @@ function SaveChanges() {
   let id = 0;
   let editUrl = "";
   if (operation == "edit") {
-    id = parseInt($('#user_id').val());
+    id = parseInt($('#id_karyawan').val());
     editUrl = "/" + id;
   }
   let formData = new FormData();
@@ -251,10 +254,9 @@ function ShowDetail(obj) {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
     type: "POST",
-    // url: "/penilaian/" + id + "/" + periode,
-    data: JSON.stringify(data),
     url: "/showpenilaian",
     contentType: "application/json",
+    data: JSON.stringify(data),
     success: function(data) {
       console.log(data);
       if (!data.code) {
@@ -274,6 +276,9 @@ function ShowDetail(obj) {
           });
           i++;
         });
+        $('#karyawan').attr('disabled', true);
+        $('#bulan').attr('disabled', true);
+        $('#tahun').attr('disabled', true);
         $('#PenilaianModal').modal('show');
       } else {
         swal.fire({
