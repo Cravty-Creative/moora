@@ -32,9 +32,6 @@ class RankingController extends Controller
       $countAll = Karyawan::query()->get()->count();
       $queryData = Karyawan::query();
       // Get All Data karyawan sesuai periode penilaian
-      // $queryData = Karyawan::query()->with('penilaian', 'penilaian.sub_penilaian')->whereHas('penilaian', function ($subquery) use ($periode) {
-      //   $subquery->where('periode', '=', $periode);
-      // });
       if ($req->has('departemen') && !empty($req->departemen)) {
         $queryData->where('departemen', '=', '%' . $req->departemen . '%');
       }
@@ -43,7 +40,6 @@ class RankingController extends Controller
         $item->penilaian =
           Penilaian::query()->where('id_karyawan', '=', $item->id)->where('periode', '=', $periode)->with('sub_penilaian')->get();
       }
-      // dd($queryData);
       /**
        * Perhitungan Ranking berdasarkan rumus Moora
        */
